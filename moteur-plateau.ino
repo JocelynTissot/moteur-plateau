@@ -5,14 +5,19 @@
 #define dir 6
 #define pas 5
 #define slp 7
+#define ledRouge 8
+#define ledVerte 9
 
 unsigned long nbTourMax = 50;
 unsigned long  nbPasMax = 1600 * nbTourMax;
 unsigned long  nbPas = nbPasMax / 2;  // Record the number of steps we've taken
-int vitNormale = 2; // tours par minutes
+int vitNormale = 10; // ~tours par minutes
 int vitRapide = 200;
 int normale = 18750 / vitNormale;
 int rapide = 18750 / vitRapide;
+//int delaiBtRapide = 500;
+//unsigned long millisAppuisBtDroite;
+//unsigned long millisAppuisBtGauche;
 
 bool etatDroite = 0;
 bool etatGauche = 0;
@@ -27,12 +32,17 @@ void setup() {
   pinMode(dir, OUTPUT);
   pinMode(pas, OUTPUT);
   pinMode(slp, OUTPUT);
+  pinMode(ledRouge, OUTPUT);
+  pinMode(ledVerte, OUTPUT);
   digitalWrite(pas, LOW);
   digitalWrite(slp, LOW); //déactive les sorties du easydiver
+  digitalWrite(ledRouge, HIGH);
+  digitalWrite(ledVerte, LOW);
 }
 
 void loop() {
-  if (!digitalRead(btDroite)/* && (digitalRead(dir) == LOW || !start)*/) {
+  
+  if (!digitalRead(btDroite)) {
     etatDroite = 1;
     etatGauche = 0;
     etatStop = 0;
@@ -40,8 +50,10 @@ void loop() {
     pause = 0;
     digitalWrite(dir, HIGH);
     digitalWrite(slp, HIGH);
+    digitalWrite(ledRouge, LOW);
+    digitalWrite(ledVerte, HIGH);
   }
-  if (!digitalRead(btGauche)/* && (digitalRead(dir) == HIGH || !start)*/) {
+  if (!digitalRead(btGauche)) {
     etatDroite = 0;
     etatGauche = 1;
     etatStop = 0;
@@ -49,15 +61,19 @@ void loop() {
     pause = 0;
     digitalWrite(dir, LOW);
     digitalWrite(slp, HIGH);
+    digitalWrite(ledRouge, LOW);
+    digitalWrite(ledVerte, HIGH);
   }
   if (!digitalRead(btStop)) {
     etatDroite = 0;
     etatGauche = 0;
     etatStop = 1;
+    digitalWrite(ledVerte, LOW);
     pause = pause + 1;
     delay(10);
     if (pause > 100) {
       digitalWrite(slp, LOW);
+      digitalWrite(ledRouge, HIGH);
     }
   }
   if (etatDroite || etatGauche && !etatStop) {
@@ -83,8 +99,10 @@ void loop() {
       nbPas = nbPas + 1;
     }
     digitalWrite(pas, HIGH);
-    delayMicroseconds(rapide);
+    (!digitalRead(btGauche) || !digitalRead(btDroite)) ? delayMicroseconds(rapide) : delayMicroseconds(normale);
+    //delayMicroseconds(rapide);
     digitalWrite(pas, LOW);
-    delayMicroseconds(rapide);
+    (!digitalRead(btGauche) || !digitalRead(btDroite)) ? delayMicroseconds(rapide) : delayMicroseconds(normale);;
+    //delayMicroseconds(rapide);
   }
 }
