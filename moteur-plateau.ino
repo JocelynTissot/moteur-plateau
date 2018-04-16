@@ -12,9 +12,11 @@ unsigned long nbTourMax = 50;
 unsigned long  nbPasMax = 1600 * nbTourMax;
 unsigned long  nbPas = nbPasMax / 2;  // Record the number of steps we've taken
 int vitNormale = 10; // ~tours par minutes
-int vitRapide = 200;
-int normale = 18750 / vitNormale;
-int rapide = 18750 / vitRapide;
+int vitRapide = 300;
+//int normale = 18750 / vitNormale;
+int normale = 37500 / vitNormale;
+//int rapide = 18750 / vitRapide;
+int rapide = 37500 / vitRapide;
 int vitesse = 0;
 int delaiBtRapide = 500;
 unsigned long millisBtDroite = 0;
@@ -64,8 +66,6 @@ void loop() {
     pause = 0;
     digitalWrite(dir, HIGH);
     digitalWrite(slp, HIGH);
-    digitalWrite(ledRouge, LOW);
-    digitalWrite(ledVerte, HIGH);
   }
   if (gauche) {
     etatDroite = 0;
@@ -75,23 +75,25 @@ void loop() {
     pause = 0;
     digitalWrite(dir, LOW);
     digitalWrite(slp, HIGH);
-    digitalWrite(ledRouge, LOW);
-    digitalWrite(ledVerte, HIGH);
   }
   if (!digitalRead(btStop)) {
     etatDroite = 0;
     etatGauche = 0;
     etatStop = 1;
     digitalWrite(ledVerte, LOW);
-    digitalWrite(ledRouge, HIGH);
     pause = pause + 1;
     delay(10);
     if (pause > 100) {
       digitalWrite(slp, LOW);
-      digitalWrite(ledRouge, LOW);
     }
   }
+  if (digitalRead(slp) && etatStop) {
+    digitalWrite(ledRouge, HIGH);
+  } else {
+    digitalWrite(ledRouge, LOW);
+  }
   if (etatDroite || etatGauche && !etatStop) {
+    digitalWrite(ledVerte, HIGH);
     // Check to see if we are at the end of our move
     if (nbPas == nbPasMax || nbPas == 0)
     {
@@ -122,9 +124,9 @@ void loop() {
   } else {
     vitesse = normale;
   }
-  digitalWrite(pas, HIGH);
-  delayMicroseconds(vitesse);
   digitalWrite(pas, LOW);
+  delayMicroseconds(5);
+  digitalWrite(pas, HIGH);
   delayMicroseconds(vitesse);
 }
 ancienEtatBtDroite = droite;
