@@ -1,22 +1,23 @@
+#define vitesseNormale  10
+#define vitesseRapide   300
+#define nbTourMaxMoteur 50
 
-#define btGauche 2
-#define btStop 3
-#define btDroite 4
-#define dir 6
-#define pas 5
-#define slp 7
-#define ledRouge 8
-#define ledVerte 9
+#define btGauche 7
+#define btStop 6
+#define btDroite 5
+#define dir 2
+#define pas 3
+#define slp 4
+#define ledRouge 9
+#define ledVerte 8
 
-unsigned long nbTourMax = 50;
+unsigned long nbTourMax = nbTourMaxMoteur;
 unsigned long  nbPasMax = 1600 * nbTourMax;
 unsigned long  nbPas = nbPasMax / 2;  // Record the number of steps we've taken
-int vitNormale = 10; // ~tours par minutes
-int vitRapide = 300;
-//int normale = 18750 / vitNormale;
-int normale = 37500 / vitNormale;
-//int rapide = 18750 / vitRapide;
-int rapide = 37500 / vitRapide;
+int vitNormale = vitesseNormale; // ~tours par minutes
+int vitRapide = vitesseRapide;
+int normale = 18750 / vitNormale;
+int rapide = 18750 / vitRapide;
 int vitesse = 0;
 int delaiBtRapide = 500;
 unsigned long millisBtDroite = 0;
