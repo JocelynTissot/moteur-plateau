@@ -1,6 +1,6 @@
-#define vitesseNormale  10
-#define vitesseRapide   300
-#define nbTourMaxMoteur 50
+#define vitesseNormale  8
+#define vitesseRapide   200
+#define nbTourMaxMoteur 30
 
 #define btGauche 7
 #define btStop 6
