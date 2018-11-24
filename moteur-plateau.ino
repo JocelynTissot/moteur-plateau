@@ -1,5 +1,5 @@
 #define vitesseNormale  8
-#define vitesseRapide   200
+#define vitesseRapide   80
 #define nbTourMaxMoteur 30
 
 #define btGauche 7
